@@ -1,0 +1,53 @@
+---
+import DarkModeToggle from "./DarkModeToggle.svelte";
+import CartIcon from "./CartIcon.svelte";
+---
+
+<header 
+  class="z-40 border-b border-gray-200 dark:border-gray-800"
+  id="main-header"
+>
+  <nav class="container py-4 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-700 to-green-600 flex items-center justify-center">
+        <span class="text-white font-bold text-lg">🐦</span>
+      </div>
+      <span class="font-bold text-lg text-gray-900 dark:text-rose-200">stray bird co</span>
+    </a>
+    
+    <div>
+      <DarkModeToggle client:load />
+    </div>
+    
+    <div class="flex items-center gap-6">
+      <a href="/products" class="text-sm font-medium text-gray-700 dark:text-rose-200 hover:text-gray-900 dark:hover:text-rose-100">Products</a>
+      <a href="#about" class="text-sm font-medium text-gray-700 dark:text-rose-200 hover:text-gray-900 dark:hover:text-rose-100">About</a>
+      <CartIcon client:load />
+    </div>
+  </nav>
+</header>
+
+<style>
+  #main-header {
+    background-color: rgb(253, 242, 248) !important;
+  }
+
+  #main-header span,
+  #main-header a {
+    color: rgb(17, 24, 39) !important;
+  }
+  
+  :root.dark #main-header {
+    background-color: rgb(20, 20, 22) !important;
+    border-color: rgb(40, 40, 42) !important;
+  }
+
+  :root.dark #main-header span,
+  :root.dark #main-header a {
+    color: rgb(225, 181, 209) !important;
+  }
+
+  :root.dark #main-header * {
+    color: rgb(225, 181, 209) !important;
+  }
+</style>

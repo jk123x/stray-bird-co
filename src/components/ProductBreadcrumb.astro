@@ -1,0 +1,40 @@
+---
+export interface Props {
+  title: string;
+}
+const { title } = Astro.props as Props;
+---
+
+<!-- This code uses the Breadcrumbs component from HyperUI
+(https://www.hyperui.dev/components/application-ui/breadcrumbs#component-1)
+Thank you to the HyperUI team for providing this open source component. -->
+<nav aria-label=" Breadcrumb">
+  <ol role="list" class="flex items-center gap-1 text-sm text-gray-600">
+    <li>
+      <a
+        href="/products"
+        class="block text-gray-800 transition hover:text-gray-700"
+      >
+        <span>Products</span>
+      </a>
+    </li>
+
+    <li>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+          clip-rule="evenodd"></path>
+      </svg>
+    </li>
+
+    <li>
+      <div class="block transition hover:text-gray-700">{title}</div>
+    </li>
+  </ol>
+</nav>

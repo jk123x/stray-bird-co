@@ -1,0 +1,45 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CartDrawer from "../components/CartDrawer.svelte";
+import { VisualEditing } from "@sanity/astro/visual-editing";
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const visualEditingEnabled =
+  import.meta.env.PUBLIC_SANITY_VISUAL_EDITING_ENABLED == "true";
+
+const defaultDesc =
+  "A lightweight and minimalist Astro starter theme using Shopify with Svelte, Tailwind, and TypeScript.";
+
+const { title, description = defaultDesc } = Astro.props as Props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style is:global>
+      @import "../styles/global.css";
+      * { font-family: 'Quicksand', sans-serif !important; }
+    </style>
+  </head>
+  <body>
+    <CartDrawer client:idle />
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <VisualEditing enabled={visualEditingEnabled} />
+  </body>
+</html>

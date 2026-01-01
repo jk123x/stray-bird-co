@@ -1,0 +1,18 @@
+---
+import { sanityClient } from "../../sanity/client";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Products from "../../components/Products.astro";
+import { setCache } from "../../utils/cache";
+
+const title = "Products";
+
+const sanityProducts = await sanityClient.fetch(
+  `*[_type == "product"] | order(_createdAt desc)`
+);
+
+setCache.short(Astro);
+---
+
+<BaseLayout title={title}>
+  <Products products={sanityProducts} />
+</BaseLayout>

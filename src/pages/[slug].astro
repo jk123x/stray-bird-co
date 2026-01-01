@@ -1,0 +1,28 @@
+---
+import { getModularPage } from "../data/sanity";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageBuilder from "../components/PageBuilder.astro";
+
+import { setCache } from "../utils/cache";
+
+const defaultTitle = "Astro + Shopify";
+
+if (!Astro.params.slug) {
+  Astro.redirect("/404");
+}
+
+const modularPage = (await getModularPage(Astro.params.slug ?? "")).data;
+
+if (!modularPage) {
+  Astro.redirect("/404");
+}
+
+const title = modularPage?.pageSeo?.title || defaultTitle;
+const pageBuilder = modularPage?.pageBuilder;
+
+setCache.short(Astro);
+---
+
+<BaseLayout title={title}
+  >{pageBuilder && <PageBuilder {pageBuilder} />}</BaseLayout
+>

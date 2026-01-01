@@ -1,16 +1,25 @@
 ---
+import { sanityClient } from "../sanity/client";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageBuilder from "../components/PageBuilder.astro";
+import { setCache } from "../utils/cache";
 
+const defaultTitle = "Straybird Co";
+
+const homePage = await sanityClient.fetch(
+  `*[_type == "page" && slug.current == "home"][0]`
+);
+
+if (!homePage) {
+  return Astro.redirect("/products");
+}
+
+const title = homePage?.seoTitle || homePage?.title || defaultTitle;
+const pageBuilder = homePage?.pageBuilder;
+
+setCache.short(Astro);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={title}>
+  {pageBuilder && <PageBuilder {pageBuilder} />}
+</BaseLayout>
