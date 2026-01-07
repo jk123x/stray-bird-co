@@ -17,6 +17,7 @@ export default defineCliConfig({
   },
   studioHost: "hats-studio",
   deployment: {
+    appId: "u6vv5xkx1glu72u7qd7wadzu",
     autoUpdates: true,
   },
   reactStrictMode: true,
