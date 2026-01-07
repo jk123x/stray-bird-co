@@ -27,7 +27,7 @@ export default defineConfig({
     }),
     presentationTool({
       title: "Preview",
-      previewUrl: location.origin,
+      previewUrl: "/",
       resolve,
     }),
     colorInput(),

@@ -38,7 +38,7 @@ export default defineConfig({
       projectId: PUBLIC_SANITY_STUDIO_PROJECT_ID,
       dataset: PUBLIC_SANITY_STUDIO_DATASET,
       useCdn: true,
-      apiVersion: "2025-03-11",
+      apiVersion: "2024-12-01",
       studioBasePath: "/studio",
       stega: {
         studioUrl: "/studio",

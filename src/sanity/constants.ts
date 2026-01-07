@@ -15,7 +15,7 @@ export const PAGE_REFERENCES = [
   { type: "product" },
 ];
 
-export const SANITY_API_VERSION = "2025-03-01";
+export const SANITY_API_VERSION = "2024-12-01";
 
 export const SHOPIFY_PRODUCT_DOCUMENT_TYPE = "product";
 export const SHOPIFY_PRODUCT_VARIANT_DOCUMENT_TYPE = "productVariant";

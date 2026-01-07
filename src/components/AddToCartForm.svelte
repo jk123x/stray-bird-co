@@ -7,12 +7,11 @@
 
   interface Props {
     variantId: string;
-    variantQuantityAvailable: number;
     variantAvailableForSale: boolean;
     variants: z.infer<typeof VariantResult>[];
   }
 
-  let { variantId, variantQuantityAvailable, variantAvailableForSale, variants }: Props = $props();
+  let { variantId, variantAvailableForSale, variants }: Props = $props();
 
   // Get selected variant from URL parameters
   let selectedVariantId = $state(variantId);

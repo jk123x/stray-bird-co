@@ -33,16 +33,15 @@ export function getSettings() {
   });
 }
 
-export function getProduct(handle: string) {
+export function getProduct(slug: string) {
   return sanityFetch<PRODUCT_QUERYResult>({
-    params: { handle },
+    params: { slug },
     query: PRODUCT_QUERY,
   });
 }
 
-export function getAllProduct(handle: string) {
+export function getAllProducts() {
   return sanityFetch<ALL_PRODUCTS_QUERYResult>({
-    params: { handle },
     query: ALL_PRODUCTS_QUERY,
   });
 }

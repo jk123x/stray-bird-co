@@ -1,10 +1,5 @@
 import { defineField, defineType } from "sanity";
 
-/**
- * Page schema.  Define and edit the fields for the 'page' content type.
- * Learn more: https://www.sanity.io/docs/schema-types
- */
-
 export const plp = defineType({
   name: "plp",
   title: "PLP",
