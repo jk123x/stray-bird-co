@@ -15,22 +15,18 @@ export const settings = defineType({
       name: "title",
       type: "string",
       description: "The title of your storefront.",
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "header",
       type: "header",
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "footer",
       type: "footer",
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "metadataBase",
       type: "url",
-      validation: (rule) => rule.required().uri({ scheme: ["http", "https"] }),
     }),
   ],
   preview: {
