@@ -2,43 +2,45 @@
 
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind CSS 4 */
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-scheme: light dark;
-  --animate-shake: shake 0.5s infinite;
 
-  @keyframes shake {
-    0% {
-      transform: translate(1px, 1px) rotate(0deg);
+  /* Expressive animations */
+  --animate-fade-up: fade-up 0.6s ease-out forwards;
+  --animate-fade-in: fade-in 0.4s ease-out forwards;
+  --animate-slide-in: slide-in 0.5s ease-out forwards;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
-    10% {
-      transform: translate(-1px, -2px) rotate(-1deg);
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
-    20% {
-      transform: translate(-3px, 0px) rotate(1deg);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
     }
-    30% {
-      transform: translate(3px, 2px) rotate(0deg);
+    to {
+      opacity: 1;
     }
-    40% {
-      transform: translate(1px, -1px) rotate(1deg);
+  }
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
     }
-    50% {
-      transform: translate(-1px, 2px) rotate(-1deg);
-    }
-    60% {
-      transform: translate(-3px, 1px) rotate(0deg);
-    }
-    70% {
-      transform: translate(3px, 1px) rotate(-1deg);
-    }
-    80% {
-      transform: translate(-1px, -1px) rotate(1deg);
-    }
-    90% {
-      transform: translate(1px, 2px) rotate(0deg);
-    }
-    100% {
-      transform: translate(1px, -2px) rotate(-1deg);
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 }
@@ -46,6 +48,7 @@
 @utility container {
   margin-inline: auto;
   padding-inline: 1.5rem;
+  max-width: 1200px;
 }
 
 @layer base {
@@ -54,13 +57,14 @@
   }
 
   body {
-    @apply flex min-h-screen flex-col bg-pink-50;
+    @apply flex min-h-screen flex-col bg-white;
+    @apply text-zinc-900;
   }
 
   :root.dark body {
-    background-color: rgb(20, 20, 22) !important;
+    @apply bg-zinc-950 text-zinc-100;
   }
-  
+
   main {
     @apply flex-1;
   }
@@ -72,30 +76,76 @@
     display: none;
   }
 
-  :root.dark h1,
-  :root.dark h2,
-  :root.dark h3,
-  :root.dark h4,
-  :root.dark h5,
-  :root.dark h6,
-  :root.dark p,
-  :root.dark a,
-  :root.dark span {
-  @apply text-pink-200;
-}
 
   *,
   :before,
   :after {
-    @apply border-gray-200;
+    @apply border-zinc-200;
   }
 
-  .button {
-    @apply flex items-center justify-center rounded-lg;
-    @apply bg-gradient-to-br from-green-700 via-green-600 to-green-500;
-    @apply px-8 py-3 text-base font-medium text-white;
-    @apply transition hover:opacity-90;
-    @apply focus:ring-2 focus:ring-green-700 focus:ring-offset-1 focus:outline-none;
-    @apply disabled:cursor-not-allowed disabled:opacity-60;
+  :root.dark *,
+  :root.dark :before,
+  :root.dark :after {
+    @apply border-zinc-800;
   }
+
+  /* Primary button - less generic gradient, more intentional */
+  .button {
+    @apply inline-flex items-center justify-center;
+    @apply bg-zinc-900 text-white;
+    @apply px-6 py-3 text-sm font-medium tracking-wide;
+    @apply transition-all duration-200;
+    @apply hover:bg-zinc-700;
+    @apply focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  :root.dark .button {
+    @apply bg-white text-zinc-900;
+    @apply hover:bg-zinc-100;
+    @apply focus:ring-white;
+  }
+
+  /* Link hover effect - expressive underline */
+  .link-hover {
+    @apply relative;
+  }
+
+  .link-hover::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-px bg-current;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .link-hover:hover::after {
+    @apply w-full;
+  }
+}
+
+/* Scroll-triggered animation helper classes */
+@layer utilities {
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .stagger-children.is-visible > *:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: translateY(0); }
+  .stagger-children.is-visible > *:nth-child(2) { transition-delay: 50ms; opacity: 1; transform: translateY(0); }
+  .stagger-children.is-visible > *:nth-child(3) { transition-delay: 100ms; opacity: 1; transform: translateY(0); }
+  .stagger-children.is-visible > *:nth-child(4) { transition-delay: 150ms; opacity: 1; transform: translateY(0); }
+  .stagger-children.is-visible > *:nth-child(5) { transition-delay: 200ms; opacity: 1; transform: translateY(0); }
+  .stagger-children.is-visible > *:nth-child(6) { transition-delay: 250ms; opacity: 1; transform: translateY(0); }
 }

@@ -18,9 +18,9 @@
   }
 </script>
 
-<button 
-  on:click={toggleDarkMode} 
-  class="text-gray-700 dark:text-rose-200 hover:opacity-80 transition text-xl"
+<button
+  on:click={toggleDarkMode}
+  class="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition text-xl"
   aria-label="Toggle dark mode"
 >
   {isDark ? '☀️' : '🌙'}

@@ -3,6 +3,7 @@ import { CartResult, ProductResult } from "./schemas";
 import { config } from "./config";
 import {
   ProductsQuery,
+  PaginatedProductsQuery,
   ProductByHandleQuery,
   CreateCartMutation,
   AddCartLinesMutation,
@@ -61,7 +62,8 @@ const makeShopifyRequest = async (
 
   const json = await response.json();
   if (json.errors) {
-    throw new Error(json.errors.map((e: Error) => e.message).join("\n"));
+    const errors = json.errors as Array<{ message: string }>;
+    throw new Error(errors.map((e) => e.message).join("\n"));
   }
 
   return json.data;
@@ -85,11 +87,59 @@ export const getProducts = async (options: {
     throw new Error("No products found");
   }
 
-  const productsList = products.edges.map((edge: any) => edge.node);
+  const productsList = products.edges.map((edge: { node: unknown }) => edge.node);
   const ProductsResult = z.array(ProductResult);
   const parsedProducts = ProductsResult.parse(productsList);
 
   return parsedProducts;
+};
+
+// Page info type for pagination
+export type PageInfo = {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor: string | null;
+  endCursor: string | null;
+};
+
+// Paginated products result type
+export type PaginatedProductsResult = {
+  products: NonNullable<z.infer<typeof ProductResult>>[];
+  pageInfo: PageInfo;
+};
+
+// Get paginated products with cursor-based pagination
+export const getPaginatedProducts = async (options: {
+  limit?: number;
+  cursor?: string | null;
+  buyerIP: string;
+}): Promise<PaginatedProductsResult> => {
+  const { limit = 12, cursor = null, buyerIP } = options;
+
+  const data = await makeShopifyRequest(
+    PaginatedProductsQuery,
+    { first: limit, after: cursor },
+    buyerIP
+  );
+  const { products } = data;
+
+  if (!products) {
+    throw new Error("No products found");
+  }
+
+  const productsList = products.edges.map((edge: { node: unknown }) => edge.node);
+  const ProductsResultSchema = z.array(ProductResult);
+  const parsedProducts = ProductsResultSchema.parse(productsList);
+
+  // Filter out null products
+  const validProducts = parsedProducts.filter(
+    (p): p is NonNullable<typeof p> => p !== null
+  );
+
+  return {
+    products: validProducts,
+    pageInfo: products.pageInfo as PageInfo,
+  };
 };
 
 // Get a product by its handle (slug)

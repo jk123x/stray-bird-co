@@ -10,8 +10,6 @@ import ProductImageGallery from "../../components/ProductImageGallery.astro";
 import ProductBreadcrumb from "../../components/ProductBreadcrumb.astro";
 import ProductInformations from "../../components/ProductInformations.astro";
 import ProductRecommendations from "../../components/ProductRecommendations.astro";
-import ProductReviews from "../../components/ProductReviews.astro";
-import ProductAccordions from "../../components/ProductAccordions.astro";
 
 const { handle } = Astro.params;
 const headers = Astro.request.headers;
@@ -84,15 +82,17 @@ setCache.short(Astro);
               </div>
             )}
 
-            <div>
-              <AddToCartForm
-                client:load
-                variants={product.variants.nodes}
-                variantId={firstVariant?.id}
-                variantQuantityAvailable={firstVariant?.quantityAvailable}
-                variantAvailableForSale={firstVariant?.availableForSale}
-              />
-            </div>
+            {firstVariant && (
+              <div>
+                <AddToCartForm
+                  client:load
+                  variants={product.variants.nodes}
+                  variantId={firstVariant.id}
+                  variantQuantityAvailable={firstVariant.quantityAvailable}
+                  variantAvailableForSale={firstVariant.availableForSale}
+                />
+              </div>
+            )}
 
             {sanityProduct?.material && (
               <div class="mt-8">
@@ -108,15 +108,8 @@ setCache.short(Astro);
               </div>
             )}
 
-            <div class="mt-8">
-              <ProductAccordions />
-            </div>
           </div>
         </div>
-      </section>
-
-      <section class="container">
-        <ProductReviews />
       </section>
 
       <section class="container">

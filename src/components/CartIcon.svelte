@@ -12,7 +12,7 @@
 </script>
 
 <div>
-  <button class="relative" onclick={() => openCart()}>
+  <button class="relative text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition" onclick={() => openCart()}>
     <span class="sr-only">Open your cart</span>
     <svg
       xmlns="http://www.w3.org/2000/svg"

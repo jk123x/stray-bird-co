@@ -1,18 +1,88 @@
 ---
-import { sanityClient } from "../../sanity/client";
+import { getPaginatedProducts } from "../../data/shopify";
+import type { PaginatedProductsResult } from "../../data/shopify";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Products from "../../components/Products.astro";
+import ProductCard from "../../components/ProductCard.astro";
 import { setCache } from "../../utils/cache";
 
 const title = "Products";
 
-const sanityProducts = await sanityClient.fetch(
-  `*[_type == "product"] | order(_createdAt desc)`
-);
+// Get cursor from URL for pagination
+const url = new URL(Astro.request.url);
+const cursor = url.searchParams.get("cursor");
+const headers = Astro.request.headers;
+const ip = headers.get("x-vercel-forwarded-for") || Astro.clientAddress;
+
+const PRODUCTS_PER_PAGE = 12;
+
+let result: PaginatedProductsResult | null = null;
+let error: string | null = null;
+
+try {
+  result = await getPaginatedProducts({
+    limit: PRODUCTS_PER_PAGE,
+    cursor,
+    buyerIP: ip,
+  });
+} catch (e) {
+  console.error("Failed to fetch products:", e);
+  error = "Unable to load products. Please try again later.";
+}
 
 setCache.short(Astro);
 ---
 
 <BaseLayout title={title}>
-  <Products products={sanityProducts} />
+  <section>
+    <div class="container py-16 sm:py-20">
+      <h1 class="text-3xl font-bold mb-8 text-zinc-900 dark:text-pink-200">All Products</h1>
+
+      {error ? (
+        <div class="text-center py-12">
+          <p class="text-red-600 mb-4">{error}</p>
+          <a
+            href="/products"
+            class="inline-block px-4 py-2 bg-emerald-900 text-white rounded hover:bg-emerald-800"
+          >
+            Try Again
+          </a>
+        </div>
+      ) : result && result.products.length > 0 ? (
+        <>
+          <h2 class="sr-only">Products</h2>
+
+          <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+            {result.products.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          <nav class="mt-12 flex justify-center gap-4" aria-label="Pagination">
+            {cursor && (
+              <a
+                href="/products"
+                class="px-4 py-2 border border-zinc-300 rounded hover:bg-zinc-50"
+              >
+                First Page
+              </a>
+            )}
+
+            {result.pageInfo.hasNextPage && result.pageInfo.endCursor && (
+              <a
+                href={`/products?cursor=${encodeURIComponent(result.pageInfo.endCursor)}`}
+                class="px-4 py-2 bg-emerald-900 text-white rounded hover:bg-emerald-800"
+              >
+                Next Page
+              </a>
+            )}
+          </nav>
+        </>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-gray-500">No products found.</p>
+        </div>
+      )}
+    </div>
+  </section>
 </BaseLayout>

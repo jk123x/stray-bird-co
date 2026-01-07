@@ -4,10 +4,10 @@
 
   interface Props {
     price: z.infer<typeof MoneyV2Result>;
-    showCurrency: boolean;
+    showCurrency?: boolean;
   }
 
-  let { price, showCurrency }: Props = $props();
+  let { price, showCurrency = false }: Props = $props();
 
   let formatPrice = $derived.by(() => new Intl.NumberFormat("en-US", {
     style: "currency",

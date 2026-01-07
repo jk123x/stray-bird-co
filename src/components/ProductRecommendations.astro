@@ -8,10 +8,15 @@ export interface Props {
 
 const { productId, buyerIP } = Astro.props as Props;
 
-const productRecommendations = await getProductRecommendations({
+const rawRecommendations = await getProductRecommendations({
   productId,
   buyerIP,
 });
+
+// Filter out null products
+const productRecommendations = rawRecommendations.filter(
+  (p): p is NonNullable<typeof p> => p !== null
+);
 ---
 
 {

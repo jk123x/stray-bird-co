@@ -27,10 +27,19 @@ const { title, description = defaultDesc } = Astro.props as Props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script is:inline>
+      // Initialize dark mode before page renders to prevent flash
+      (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
     <style is:global>
-      @import "../styles/global.css";
-      * { font-family: 'Quicksand', sans-serif !important; }
+      body {
+        font-family: 'Quicksand', system-ui, sans-serif;
+      }
     </style>
   </head>
   <body>

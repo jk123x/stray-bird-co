@@ -66,7 +66,6 @@ fragment productFragment on Product {
       id
       title
       availableForSale
-      quantityAvailable
       selectedOptions {
         name
         value
@@ -99,6 +98,26 @@ query ($first: Int!) {
         node {
           ...productFragment
         }
+      }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
+
+export const PaginatedProductsQuery = `#graphql
+query ($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
+      edges {
+        node {
+          ...productFragment
+        }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
       }
     }
   }

@@ -8,6 +8,7 @@
     removeCartItems,
     isCartUpdating,
     updateCartItem,
+    cartError,
   } from "../stores/cart";
   import ShopifyImage from "./ShopifyImage.svelte";
   import Money from "./Money.svelte";
@@ -60,10 +61,10 @@
     aria-modal="true"
   >
     <div
-      in:fade={{ duration: 500 }}
-      out:fade={{ duration: 500 }}
-      class="fixed inset-0 bg-slate-400/50 backdrop-blur-sm transition-opacity"
-></div>
+      in:fade={{ duration: 300 }}
+      out:fade={{ duration: 200 }}
+      class="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm"
+    ></div>
 
     <div class="fixed inset-0 overflow-hidden">
       <div class="absolute inset-0 overflow-hidden">
@@ -76,14 +77,14 @@
           onkeydown={onKeyDown}
         >
           <div
-            in:fly={{ duration: 500, x: 500, opacity: 100 }}
-            out:fly={{ duration: 500, x: 500, opacity: 100 }}
-            class="pointer-events-auto w-screen max-w-lg max-h-screen bg-white"
+            in:fly={{ duration: 400, x: 400, opacity: 1, easing: t => 1 - Math.pow(1 - t, 3) }}
+            out:fly={{ duration: 300, x: 400, opacity: 1 }}
+            class="pointer-events-auto w-screen max-w-md max-h-screen bg-white dark:bg-zinc-950"
           >
             <div class="flex flex-col min-h-full max-h-screen">
-              <div class="flex items-start justify-between shadow-sm p-5">
+              <div class="flex items-start justify-between border-b border-zinc-100 dark:border-zinc-800 p-6">
                 <h2
-                  class="text-2xl flex gap-4 items-center font-bold text-zinc-800"
+                  class="text-xl flex gap-3 items-center font-semibold text-zinc-900 dark:text-zinc-100"
                   id="slide-over-title"
                 >
                   Your cart
@@ -139,6 +140,12 @@
 
               <div class="flex-1 overflow-y-scroll">
                 <div class="px-5">
+                  {#if $cartError}
+                    <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md" role="alert">
+                      <p class="text-sm text-red-700">{$cartError}</p>
+                    </div>
+                  {/if}
+
                   {#if $cart && $cart.lines?.nodes.length > 0}
                     <!-- svelte-ignore a11y_no_redundant_roles -->
                     <ul
