@@ -1,20 +1,14 @@
 ---
-import { sanityClient } from "../sanity/client";
+import { getHomePage } from "../data/sanity";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageBuilder from "../components/PageBuilder.astro";
 import { setCache } from "../utils/cache";
 
 const defaultTitle = "Straybird Co";
 
-const homePage = await sanityClient.fetch(
-  `*[_type == "page" && slug.current == "home"][0]`
-);
+const { data: homePage } = await getHomePage();
 
-if (!homePage) {
-  return Astro.redirect("/products");
-}
-
-const title = homePage?.seoTitle || homePage?.title || defaultTitle;
+const title = homePage?.pageSeo?.title || defaultTitle;
 const pageBuilder = homePage?.pageBuilder;
 
 setCache.short(Astro);

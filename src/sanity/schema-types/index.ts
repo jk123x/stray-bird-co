@@ -6,6 +6,7 @@ import { product } from "./documents/product";
 import { productVariant } from "./documents/product-variant";
 import { backgroundImage } from "./objects/background-image";
 import { editorialSection } from "./objects/editorial-section";
+import { featuredProducts } from "./objects/featured-products";
 import { footer } from "./objects/footer";
 import { header } from "./objects/header";
 import { linkExternal } from "./objects/link-external";
@@ -42,6 +43,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   backgroundImage,
   richText,
   editorialSection,
+  featuredProducts,
   /// Global
   pageSeo,
   linkExternal,

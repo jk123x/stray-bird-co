@@ -34,6 +34,14 @@ const pageBuilderFields = /* groq */ `
       )},
     },
   "textColor": coalesce(textColor.hex, 'black'),
+  "products": products[]->{
+    _id,
+    "title": coalesce(customName, store.title),
+    "slug": store.slug.current,
+    "price": store.priceRange.minVariantPrice,
+    "image": store.previewImageUrl,
+    "featuredImage": featuredImage.asset->url,
+  },
 `;
 
 const linkFields = /* groq */ `

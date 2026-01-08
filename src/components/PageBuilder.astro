@@ -1,11 +1,39 @@
 ---
 import type { PortableTextProps } from "astro-portabletext/types";
-import type { HOME_QUERYResult } from "../data/sanity/types.generated";
 import RichText from "./RichText.astro";
 import SanityImage from "./SanityImage.astro";
 
+interface FeaturedProduct {
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  price: number | null;
+  image: string | null;
+  featuredImage: string | null;
+}
+
+interface EditorialBlock {
+  _key: string;
+  _type: "editorialSection";
+  cover?: Array<{
+    _type: string;
+    backgroundImage?: { asset: any; alt?: string } | null;
+    color?: string | null;
+  }>;
+  content?: any;
+  textColor?: string;
+}
+
+interface FeaturedProductsBlock {
+  _key: string;
+  _type: "featuredProducts";
+  products?: FeaturedProduct[];
+}
+
+type PageBlock = EditorialBlock | FeaturedProductsBlock;
+
 interface Props {
-  pageBuilder: NonNullable<HOME_QUERYResult>["pageBuilder"];
+  pageBuilder: PageBlock[] | null;
 }
 
 const { pageBuilder } = Astro.props;
@@ -48,15 +76,76 @@ const { pageBuilder } = Astro.props;
     padding: 2rem;
     text-align: center;
   }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 2rem 1rem;
+    }
+  }
+
+  .product-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .product-card h3 {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .product-card .price {
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
 </style>
+
 {
   pageBuilder?.map((block, index) => {
+    if (block._type === "featuredProducts" && block.products) {
+      return (
+        <section class="products-grid">
+          {block.products.map((product) => (
+            <a href={`/products/${product.slug}`} class="product-card">
+              {(product.featuredImage || product.image) && (
+                <img
+                  src={product.featuredImage || product.image}
+                  alt={product.title || "Product"}
+                  loading="lazy"
+                />
+              )}
+              <h3>{product.title}</h3>
+              {product.price && <p class="price">${product.price}</p>}
+            </a>
+          ))}
+        </section>
+      );
+    }
+
     return (
       <section
         class="section"
-        style={{ backgroundColor: `${block.cover[0]?.color ?? "#000"}` }}
+        style={{ backgroundColor: `${block.cover?.[0]?.color ?? "#000"}` }}
       >
-        {block.cover[0].backgroundImage?.asset && (
+        {block.cover?.[0]?.backgroundImage?.asset && (
           <div class="background">
             <SanityImage
               node={block.cover[0].backgroundImage.asset}
