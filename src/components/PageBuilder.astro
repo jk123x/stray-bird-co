@@ -77,63 +77,35 @@ const { pageBuilder } = Astro.props;
     text-align: center;
   }
 
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 4rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 768px) {
-    .products-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      padding: 2rem 1rem;
-    }
-  }
-
-  .product-card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .product-card img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
-
-  .product-card h3 {
-    margin-top: 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-  }
-
-  .product-card .price {
-    font-size: 0.875rem;
-    opacity: 0.7;
-  }
 </style>
 
 {
   pageBuilder?.map((block, index) => {
     if (block._type === "featuredProducts" && block.products) {
       return (
-        <section class="products-grid">
+        <section class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 px-6 py-12 max-w-5xl mx-auto">
           {block.products.map((product) => (
-            <a href={`/products/${product.slug}`} class="product-card">
-              {(product.featuredImage || product.image) && (
-                <img
-                  src={product.featuredImage || product.image}
-                  alt={product.title || "Product"}
-                  loading="lazy"
-                />
-              )}
-              <h3>{product.title}</h3>
-              {product.price && <p class="price">${product.price}</p>}
+            <a href={`/products/${product.slug}`} class="group block">
+              <div class="relative aspect-square overflow-hidden">
+                {(product.featuredImage || product.image) && (
+                  <img
+                    src={product.featuredImage || product.image}
+                    alt={product.title || "Product"}
+                    loading="lazy"
+                    class="w-full h-full object-contain p-4 transition-all duration-500 ease-out group-hover:scale-[1.02]"
+                  />
+                )}
+              </div>
+              <div class="pt-4 space-y-1">
+                <h3 class="text-base font-medium text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors duration-200">
+                  {product.title}
+                </h3>
+                {product.price && (
+                  <p class="text-sm text-zinc-500 dark:text-pink-200 group-hover:text-emerald-600 dark:group-hover:text-pink-200 transition-colors duration-300">
+                    ${product.price}
+                  </p>
+                )}
+              </div>
             </a>
           ))}
         </section>

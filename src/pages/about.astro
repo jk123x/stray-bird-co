@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { setCache } from "../utils/cache";
+
+const title = "About";
+
+setCache.short(Astro);
+---
+
+<BaseLayout title={title}>
+  <section class="max-w-2xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-medium text-zinc-900 dark:text-white mb-12">About</h1>
+
+    <div class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+      <p>
+        Australian hats, prints and embroidery, inspired by birds and places we love.
+      </p>
+      <p class="mt-8 text-zinc-400 dark:text-zinc-500 text-sm">
+        Based in Melbourne. Ships Australia-wide.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
