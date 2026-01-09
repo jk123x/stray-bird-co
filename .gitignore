@@ -32,3 +32,8 @@ coverage/
 
 # Claude Code
 .claude/
+
+# claude config
+CLAUDE.md
+claude.md
+.claude/
